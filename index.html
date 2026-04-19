@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catering Ops Suite</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Catering Ops Suite</h1>
+        <p>Invoice, quotation, menu builder, and shopping list in one customizable workspace.</p>
+      </div>
+      <button id="reset-data" class="danger">Reset Saved Data</button>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <h2>Business & Customer Settings</h2>
+        <form id="settings-form" class="form-grid"></form>
+        <div class="actions">
+          <button id="save-settings">Save Settings</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Menu Generator</h2>
+        <p>Create categorized menu items and pricing for your catering packages.</p>
+        <form id="menu-item-form" class="row-form">
+          <input type="text" name="name" placeholder="Dish name" required />
+          <input type="text" name="category" placeholder="Category (e.g. Appetizer)" required />
+          <input type="number" step="0.01" min="0" name="price" placeholder="Price" required />
+          <button type="submit">Add Item</button>
+        </form>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Dish</th><th>Category</th><th>Price</th><th></th></tr>
+            </thead>
+            <tbody id="menu-items"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Quotation Builder</h2>
+        <form id="quote-meta" class="row-form">
+          <input type="text" name="quoteId" placeholder="Quote ID" required />
+          <input type="date" name="eventDate" required />
+          <input type="number" min="1" name="guests" placeholder="Guests" required />
+          <input type="number" step="0.01" min="0" name="serviceFee" placeholder="Service Fee" value="0" />
+          <button type="submit">Set Details</button>
+        </form>
+        <form id="quote-item-form" class="row-form">
+          <select name="menuItem" required></select>
+          <input type="number" min="1" name="quantity" value="1" required />
+          <button type="submit">Add to Quote</button>
+        </form>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Item</th><th>Qty</th><th>Unit</th><th>Line Total</th><th></th></tr>
+            </thead>
+            <tbody id="quote-items"></tbody>
+            <tfoot>
+              <tr><td colspan="3">Subtotal</td><td id="quote-subtotal">$0.00</td><td></td></tr>
+              <tr><td colspan="3">Service Fee</td><td id="quote-fee">$0.00</td><td></td></tr>
+              <tr><td colspan="3"><strong>Total</strong></td><td id="quote-total"><strong>$0.00</strong></td><td></td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Invoice Generator</h2>
+        <form id="invoice-form" class="row-form">
+          <input type="text" name="invoiceId" placeholder="Invoice ID" required />
+          <input type="date" name="issueDate" required />
+          <input type="date" name="dueDate" required />
+          <select name="source" required>
+            <option value="quote">Use Current Quote</option>
+            <option value="blank">Start Blank</option>
+          </select>
+          <button type="submit">Create Invoice</button>
+        </form>
+        <div id="invoice-preview" class="invoice-preview empty">No invoice created yet.</div>
+      </section>
+
+      <section class="card full-width">
+        <h2>Shopping List Generator</h2>
+        <p>Convert quote items into a prep list and add custom supply notes.</p>
+        <form id="shopping-note-form" class="row-form">
+          <input type="text" name="note" placeholder="Add supply note (e.g., extra napkins)" required />
+          <button type="submit">Add Note</button>
+        </form>
+        <div class="list-columns">
+          <div>
+            <h3>Auto-generated from quote</h3>
+            <ul id="shopping-auto"></ul>
+          </div>
+          <div>
+            <h3>Custom notes</h3>
+            <ul id="shopping-notes"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card full-width">
+        <h2>Custom Fields</h2>
+        <p>Add your own fields to the customer/business form (fully customizable).</p>
+        <form id="custom-field-form" class="row-form">
+          <input type="text" name="key" placeholder="Field key (e.g., taxId)" required />
+          <input type="text" name="label" placeholder="Field label" required />
+          <input type="text" name="placeholder" placeholder="Placeholder text" />
+          <button type="submit">Add Custom Field</button>
+        </form>
+        <ul id="custom-fields-list" class="pill-list"></ul>
+      </section>
+    </main>
+
+    <template id="invoice-template">
+      <article>
+        <h3>Invoice <span data-invoice-id></span></h3>
+        <p><strong>Issue:</strong> <span data-issue-date></span> | <strong>Due:</strong> <span data-due-date></span></p>
+        <p><strong>Customer:</strong> <span data-customer></span></p>
+        <p><strong>Business:</strong> <span data-business></span></p>
+        <table>
+          <thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead>
+          <tbody data-lines></tbody>
+          <tfoot><tr><td colspan="3">Total</td><td data-total></td></tr></tfoot>
+        </table>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
